@@ -12,9 +12,16 @@ jobs:
       - name: Get Environments
         id: get-environments
         run: |
-          echo 'environments=["yoo"]' >> "$GITHUB_OUTPUT"
+          if [[ "${{ github.ref_name }}" == "\d{4}-\d{2}."* ]]; then
+            echo "Environment is staging"
+            echo 'environments=["staging"]' >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "Environments are [dev, qa]"
+            echo 'environments=["dev", "qa"]' >> "$GITHUB_OUTPUT"
+          fi
     outputs:
       environments: ${{ steps.get-environments.output.environments }}
+      test: 123
 
   testing:
     runs-on: ubuntu-latest
@@ -22,6 +29,7 @@ jobs:
     strategy:
       matrix: 
         env:
+          - ${{ needs.get-environments.outputs.test }}
           - ${{ needs.get-environments.outputs.environments }}
           # env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
         tag:
