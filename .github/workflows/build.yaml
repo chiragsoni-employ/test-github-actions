@@ -12,15 +12,7 @@ jobs:
       - name: Get Environments
         id: get-environments
         run: |
-          if [[ "${{ github.ref_name }}" == "\d{4}-\d{2}."* ]]; then
-            echo "Environment is staging"
-            echo 'environments=["staging"]' >> "$GITHUB_OUTPUT"
-          elif [[ "${{ github.ref_name }}" == "main" ]]; then
-            echo "Environments are [dev, qa]"
-            echo 'environments=["dev", "qa"]' >> "$GITHUB_OUTPUT"
-          else
-            echo 'environments=["yoo"]' >> "$GITHUB_OUTPUT"
-          fi
+          echo 'environments=["yoo"]' >> "$GITHUB_OUTPUT"
     outputs:
       environments: ${{ steps.get-environments.output.environments }}
 
