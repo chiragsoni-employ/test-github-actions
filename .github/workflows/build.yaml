@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Environments
+        id: get-environments
         run: |
           if [[ "${{ github.ref_name }}" == "\d{4}-\d{2}."* ]]; then
             echo "Environment is staging"
