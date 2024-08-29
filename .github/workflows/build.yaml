@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        env: ${{github.ref_name}}
+        env: 
+          - ${{github.ref_name}}
+          - abc
+          - 123
     steps:
       # checkout the code
       - name: Checkout code
