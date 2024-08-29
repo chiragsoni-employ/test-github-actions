@@ -8,7 +8,7 @@ on:
 jobs:
   set-image-tag:
     runs-on: ubuntu-latest
-    stratergy:
+    strategy:
       matrix: 
         env: ${{ fromJson('[ "github.ref_name", "abc"]') }}
     steps:
