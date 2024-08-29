@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        env: ${{ fromJson('[ "${{github.ref_name}}", "abc"]') }}
+        env: ${{github.ref_name}}
     steps:
       # checkout the code
       - name: Checkout code
