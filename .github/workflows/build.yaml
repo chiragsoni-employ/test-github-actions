@@ -2,7 +2,7 @@ name: Build docker image
 
 on:
   push:
-    tag:
+    tags:
       - '*'
     branches:
       - main
