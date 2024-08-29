@@ -27,7 +27,9 @@ jobs:
     needs: [get-environments]
     strategy:
       matrix: 
-        env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
+        env:
+          - ${{ needs.get-environments.outputs.environments }}
+          # env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
         tag:
           - 101
     steps:
