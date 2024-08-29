@@ -20,18 +20,14 @@ jobs:
             echo 'environments=["dev", "qa"]' >> "$GITHUB_OUTPUT"
           fi
     outputs:
-      environments: ${{ steps.get-environments.output.environments }}
-      test: 123
+      environments: ${{ steps.get-environments.outputs.environments }}
 
   testing:
     runs-on: ubuntu-latest
     needs: [get-environments]
     strategy:
       matrix: 
-        env:
-          - ${{ needs.get-environments.outputs.test }}
-          - ${{ needs.get-environments.outputs.environments }}
-          # env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
+        env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
         tag:
           - 101
     steps:
