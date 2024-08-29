@@ -15,7 +15,7 @@ jobs:
           if [[ "${{ github.ref_name }}" == "\d{4}-\d{2}."* ]]; then
             echo "Environment is staging"
             echo 'environments="["staging"]"' >> "$GITHUB_OUTPUT"
-          elif [[ "${{ github.ref_name }}" == "master" ]]; then
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
             echo "Environments are [dev, qa]"
             echo 'environments="["dev", "qa"]"' >> "$GITHUB_OUTPUT"
           fi
@@ -27,9 +27,7 @@ jobs:
     needs: [get-environments]
     strategy:
       matrix: 
-        env:
-          - ${{needs.get-environments.outputs.environments}}
-          # env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
+        env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
         tag:
           - 101
     steps:
