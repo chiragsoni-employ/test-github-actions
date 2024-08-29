@@ -1,0 +1,23 @@
+name: Build docker image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  set-image-tag:
+    runs-on: ubuntu-latest
+    stratergy:
+      matrix: 
+        env: ${{ fromJson('[ "github.ref_name", "abc"]') }}
+    steps:
+      # checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - name: Run 
+        run: |
+          echo "env=${{matrix.env}}"
