@@ -1,34 +1,45 @@
 name: Build docker image
 
 on:
-  workflow_dispatch:
-      inputs:
-        app-name:
-          description: 'Choose helm chart to deploy -OR- ALL for all charts'
-          type: choice
-          options:
-            - talemetry-int-all
-            - talemetry-int-api
-            - talemetry-int-consumer
-            - talemetry-int-flyway
-            - talemetry-int-historical-sync-consumer
-            - talemetry-int-web
-            - talemetry-int-worker
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
 
 jobs:
-  job1:
+  get-environments:
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.app-name == 'talemetry-int-flyway' || github.event.inputs.app-name == 'talemetry-int-all' }}
     steps:
-      - name: app-name
+      - name: Get Environments
+        id: get-environments
         run: |
-            echo "[job1] app-name = ${{ github.event.inputs.app-name }}"
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "Environment is staging"
+            echo 'environments=["staging"]' >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "Environments are [dev, qa]"
+            echo 'environments=["dev", "qa"]' >> "$GITHUB_OUTPUT"
+          fi
+    outputs:
+      environments: ${{ steps.get-environments.outputs.environments }}
 
-  job2:
+  testing:
     runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: [job1]
+    needs: [get-environments]
+    strategy:
+      matrix: 
+        env: ${{ fromJson(needs.get-environments.outputs.environments) }} 
+        tag:
+          - ${{ github.ref_name }}
     steps:
-      - name: app-name
+      # checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - name: Run 
         run: |
-            echo "[job2] app-name = ${{ github.event.inputs.app-name }}"
+          echo "env=${{matrix.env}}"
+          echo "tag=${{matrix.tag}}"
