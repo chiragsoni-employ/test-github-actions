@@ -13,11 +13,11 @@ jobs:
 
       # Step 2: Conditionally run the step if MY_FLAG is "true"
       - name: Run if MY_FLAG is true
-        if: ${{ env.MY_FLAG == 'true' }}
+        if: env.MY_FLAG == 'true'
         run: echo "MY_FLAG is set to true, so this step will run."
 
       # Step 3: Conditionally run the step if MY_FLAG is "false"
       - name: Run if MY_FLAG is false
-        if: ${{ env.MY_FLAG == 'false' }}
+        if: env.MY_FLAG == 'false'
         run: echo "MY_FLAG is set to false, so this step will run."
 
